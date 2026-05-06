@@ -7,11 +7,12 @@ type DropDownItem = { label: string; value: string }
 type DropDownProps = {
     HeadingPlaceholder: string
     items: DropDownItem[]
+    value: string | null
+    setValue: (value: string | null) => void
 }
 
 export default function DropDown(props: DropDownProps) {
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState<string | null>(null)
     const [items, setItems] = useState<DropDownItem[]>(props.items)
 
     return (
@@ -19,10 +20,16 @@ export default function DropDown(props: DropDownProps) {
             <DropDownPicker
                 style={styles.dropdown}
                 open={open}
-                value={value}
+                value={props.value}
                 items={items}
                 setOpen={setOpen}
-                setValue={setValue}
+                setValue={(callback) => {
+                    if (typeof callback === "function") {
+                        props.setValue(callback(props.value));
+                    } else {
+                        props.setValue(callback);
+                    }
+                }}
                 setItems={setItems}
                 placeholder={props.HeadingPlaceholder}
                 placeholderStyle={styles.placeholder}
@@ -39,20 +46,24 @@ const styles = StyleSheet.create({
     wrapper: {
         zIndex: 1000,
         marginTop: 4,
+        overflow: 'visible',
     },
     dropdown: {
         borderColor: '#D0D5DD',
         borderRadius: 12,
         backgroundColor: '#F8FAFC',
         height: 52,
+        overflow: 'visible',
     },
     placeholder: {
         color: '#667085',
+        zIndex: 999,
     },
     dropDownContainer: {
         borderColor: '#D0D5DD',
         borderRadius: 12,
-        backgroundColor: '#F8FAFC',
+        backgroundColor: 'white',
         zIndex: 1001,
+        overflow: 'visible',
     },
 })

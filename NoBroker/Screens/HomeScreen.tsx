@@ -18,7 +18,7 @@ export default function HomeScreen() {
   return (
             <ImageBackground source={{ uri: 'https://wallpapercat.com/w/middle-vertical-retina/7/2/3/289617-1440x2560-phone-hd-burj-khalifa-wallpaper.jpg' }} style={{ height: '100%' }}>
                 <View style={styles.container}>
-                    <Text style={styles.heading}>HIBROKER</Text>
+                    <Text style={styles.heading}>NOBROKER</Text>
                 </View>
                 <View style={styles.buttons}>
                     <Pressable style={styles.button} onPress={() => navigation.navigate('Signin')}>
