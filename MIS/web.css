@@ -1,0 +1,32 @@
+/* Hide native password reveal icons on web browsers */
+
+/* Blink/WebKit (Chrome, Edge, Safari) */
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-textfield-decoration-button,
+input[type="password"]::-webkit-contacts-auto-fill-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+/* extra selectors for various browser implementations */
+input[type="password"]::-webkit-password-reveal,
+input[type="password"]::-webkit-password-reveal-button,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-text-decoration,
+input[type="password"]::-webkit-textfield-decoration,
+input[type="password"]::-webkit-search-decoration {
+  display: none !important;
+}
+
+/* Fallback: prevent autofill background color */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+  box-shadow: 0 0 0px 1000px #fff inset !important;
+}

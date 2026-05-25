@@ -1,16 +1,17 @@
 import { StyleSheet, View, Text, TextInput, Pressable, ScrollView } from 'react-native'
 import DropDown from '../inputs/DropDown'
 import React, { useState } from 'react'
-import { collection, addDoc, getFirestore } from 'firebase/firestore';
-import { db } from '../src/firebase/firebaseconfig';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../src/firebase/firebaseconfig';
 import * as Yup from 'yup';
 
+export default function SignUpScreen() { 
 
-export default function SignUpScreen() {
+  const [error , setError] = useState({});
 
   const saveUser = async () => {
     try {
-      await addDoc(collection(db, 'users'), { formData });
+      await addDoc(collection(db, 'users'),formData);
       console.log('Data saved successfully on Firebase!');
     } catch (error) {
       console.error('Error saving to Firebase:', error);
@@ -47,7 +48,7 @@ export default function SignUpScreen() {
     address: '',
     aradaSalesperson: '',
   }));
-  const [error , setError] = useState({});
+  
   validationSchema.isValid(formData).then(valid => {
     console.log('Form is valid:', valid);
   }).catch(error => {

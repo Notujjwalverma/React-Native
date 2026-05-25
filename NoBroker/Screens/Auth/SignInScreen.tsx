@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../src/firebase/firebaseconfig';
-import React, { useState } from 'react'
-
-
+import { db } from '../../src/firebase/firebaseconfig';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import Dashboard from '../User/Dashboard';
 
 const styles = StyleSheet.create({
   container: {
@@ -44,20 +44,19 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
   },
-  DisabledsubmitBtn : {
-    opacity : 0.5,
+  DisabledsubmitBtn: {
+    opacity: 0.5,
     marginVertical: 20,
     backgroundColor: 'olive',
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
-    cursor : 'not-allowed',
   },
   submitText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '400',
-    fontFamily : 'Poppins_400Regular',
+    fontFamily: 'Poppins_400Regular',
   },
 
 })
@@ -66,16 +65,36 @@ export default function SignInScreen() {
 
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<any>();
 
   const checkEmailValidity = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email) && !loading ;
+    return emailRegex.test(email) && !loading;
   }
 
-  const handleSubmit = () => {
-      console.log('Form submitted successfully!', email);
-      setLoading(true);
-      setEmail('');
+  const getUsers = async () => {
+    const q = query(
+      collection(db, "users"),
+      where("companyEmail", "==", email
+      )
+    );
+    const snapshot = await getDocs(q);
+    const user = snapshot.docs[0];
+    if (!user) {
+      alert("User not registered");
+      
+      return ;
+    }
+    navigation.navigate('Dashboard');
+    console.log(user);
+  }
+
+  const handleSubmit =async () => {
+    console.log('Form submitted successfully!', email);
+    setLoading(true);
+    await getUsers();
+    setLoading(false);
+    setEmail('');
   }
   return (
     <View style={styles.container}>
@@ -87,7 +106,7 @@ export default function SignInScreen() {
         value={email}
         onChangeText={setEmail}
       />
-      <Pressable disabled={!checkEmailValidity(email)} style={checkEmailValidity(email) ? styles.submitBtn :  styles.DisabledsubmitBtn} onPress={handleSubmit}>
+      <Pressable disabled={!checkEmailValidity(email)} style={checkEmailValidity(email) ? styles.submitBtn : styles.DisabledsubmitBtn} onPress={handleSubmit}>
         <Text style={styles.submitText}>{loading ? 'Please Wait' : 'Sign in'}</Text>
       </Pressable>
     </View>

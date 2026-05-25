@@ -8,7 +8,7 @@ type DropDownProps = {
     HeadingPlaceholder: string
     items: DropDownItem[]
     value: string | null
-    setValue: (value: string | null) => void
+    setValue: (value: string | null | ((prev: string | null) => string | null)) => void
 }
 
 export default function DropDown(props: DropDownProps) {
