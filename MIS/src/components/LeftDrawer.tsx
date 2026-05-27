@@ -6,12 +6,20 @@ import {
   Dimensions,
   Pressable,
   Text,
-  
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useDrawer } from './DrawerContext'
 
-export default function LeftDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function LeftDrawer({
+  open,
+  onClose,
+}: {
+  open: boolean
+  onClose: () => void
+}) {
   const navigation = useNavigation<any>()
+  const drawer = useDrawer()
+  const currentRouteName = drawer?.currentRouteName ?? ''
   const screenWidth = Dimensions.get('window').width
   const drawerWidth = Math.min(320, Math.round(screenWidth * 0.78))
   const anim = useRef(new Animated.Value(open ? 1 : 0)).current
@@ -32,8 +40,13 @@ export default function LeftDrawer({ open, onClose }: { open: boolean; onClose: 
   const [otherOpen, setOtherOpen] = useState(false)
 
   const navigate = (route: string, params?: any) => {
+    navigation.navigate(route, params)
     onClose()
-    navigation.navigate(route as any, params)
+  }
+
+  const isActiveRoute = (routeNames: string | string[]) => {
+    const routes = Array.isArray(routeNames) ? routeNames : [routeNames]
+    return routes.includes(currentRouteName)
   }
 
   return (
@@ -51,15 +64,25 @@ export default function LeftDrawer({ open, onClose }: { open: boolean; onClose: 
         </View>
 
         <View style={styles.content}>
-          <Pressable style={styles.item} onPress={() => navigate('Profile')}>
-            <Text style={styles.itemText}>Profile</Text>
+          <Pressable
+            style={[styles.item, isActiveRoute('Dashboard') && styles.activeItem]}
+            onPress={() => navigate('Dashboard')}
+          >
+            <Text style={[styles.itemText, isActiveRoute('Dashboard') && styles.activeItemText]}>Dashboard</Text>
           </Pressable>
 
           <Pressable
-            style={styles.item}
+            style={[styles.item, isActiveRoute('Profile') && styles.activeItem]}
+            onPress={() => navigate('Profile')}
+          >
+            <Text style={[styles.itemText, isActiveRoute('Profile') && styles.activeItemText]}>Profile</Text>
+          </Pressable>
+
+          <Pressable
+            style={[styles.item, isActiveRoute(['ApplyLeave', 'LeaveRequestStatus']) && styles.activeItem]}
             onPress={() => setLeaveOpen((v) => !v)}
           >
-            <Text style={styles.itemText}>Leave Management</Text>
+            <Text style={[styles.itemText, isActiveRoute(['ApplyLeave', 'LeaveRequestStatus']) && styles.activeItemText]}>Leave Management</Text>
             <Text style={styles.chev}>{leaveOpen ? '▾' : '▸'}</Text>
           </Pressable>
           {leaveOpen && (
@@ -74,17 +97,21 @@ export default function LeftDrawer({ open, onClose }: { open: boolean; onClose: 
           )}
 
           <Pressable
-            style={styles.item}
+            style={[styles.item, isActiveRoute('OtherPortals') && styles.activeItem]}
             onPress={() => setOtherOpen((v) => !v)}
           >
-            <Text style={styles.itemText}>Other Portals</Text>
+            <Text style={[styles.itemText, isActiveRoute('OtherPortals') && styles.activeItemText]}>Other Portals</Text>
             <Text style={styles.chev}>{otherOpen ? '▾' : '▸'}</Text>
           </Pressable>
           {otherOpen && (
             <View style={styles.subList}>
               {['Athena', 'Helpdesk', 'Github', 'ATS', 'Contripoints', 'Gembook'].map((p) => (
-                <Pressable key={p} style={styles.subItem} onPress={() => navigate('OtherPortals', { portal: p })}>
-                  <Text style={styles.subItemText}>{p}</Text>
+                <Pressable
+                  key={p}
+                  style={[styles.subItem, isActiveRoute('OtherPortals') && styles.activeSubItem]}
+                  onPress={() => navigate('OtherPortals', { portal: p })}
+                >
+                  <Text style={[styles.subItemText, isActiveRoute('OtherPortals') && styles.activeItemText]}>{p}</Text>
                 </Pressable>
               ))}
             </View>
@@ -104,6 +131,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#000',
+    zIndex: 100,
+    elevation: 9,
   },
   drawer: {
     position: 'absolute',
@@ -116,7 +145,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
-    zIndex: 50,
+    zIndex: 101,
     paddingTop: 48,
   },
   header: {
@@ -163,7 +192,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#0F172A',
   },
+  activeItem: {
+    backgroundColor: '#E0F2FE',
+    borderRadius: 8,
+  },
+  activeSubItem: {
+    backgroundColor: '#DBEAFE',
+    borderRadius: 8,
+  },
+  activeItemText: {
+    color: '#0369A1',
+    fontWeight: '700',
+  },
   backdropPressable: {
-    flex: 1,
+    ...StyleSheet.absoluteFill,
   },
 })

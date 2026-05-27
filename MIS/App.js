@@ -1,35 +1,46 @@
 import { StatusBar } from 'expo-status-bar';
 import './web.css';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { store } from './src/redux/store';
-import { Provider } from 'react-redux'
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
+import { DrawerProvider } from './src/components/DrawerContext';
 
 import AppNavigator from './src/Navigation/AppNavigator';
 
 // Import Firebase to initialize it
 import './src/firebase/firebaseconfig';
 
+const navigationRef = createNavigationContainerRef()
+
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
+  const [fontsLoaded] = useFonts({
+    GoogleSans: Poppins_400Regular,
+    'GoogleSans-Medium': Poppins_500Medium,
+    'GoogleSans-Bold': Poppins_700Bold,
+  });
 
   useEffect(() => {
-    try {
-      // App is ready to render
-      setIsReady(true);
-    } catch (err) {
-      console.error('App initialization error:', err);
-      setError(err);
+    if (fontsLoaded) {
+      Text.defaultProps = Text.defaultProps || {};
+      Text.defaultProps.style = {
+        ...(Text.defaultProps.style || {}),
+        fontFamily: 'GoogleSans',
+      };
     }
-  }, []);
+  }, [fontsLoaded]);
 
-  if (!isReady) {
+  if (!fontsLoaded) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0EA5E9" />
-        <Text style={styles.loadingText}>Initializing app...</Text>
+        <Text style={styles.loadingText}>Loading fonts...</Text>
       </View>
     );
   }
@@ -46,11 +57,11 @@ export default function App() {
   return (
     <View style={styles.appContainer}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
-      <Provider store={store}>
-        <NavigationContainer>
-          <AppNavigator />
+        <NavigationContainer ref={navigationRef}>
+          <DrawerProvider navigationRef={navigationRef}>
+            <AppNavigator />
+          </DrawerProvider>
         </NavigationContainer>
-      </Provider>
     </View>
   );
 }

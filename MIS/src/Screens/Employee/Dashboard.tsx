@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native'
 import Navbar from '../../components/Navbar'
 import ScrollingMarquee from '../../components/ScrollingMarquee'
 import LeftDrawer from '../../components/LeftDrawer'
+import Calendar from '../../components/Calendar'
+import button from '../../components/Buttons/Button'
+import Button from '../../components/Buttons/Button'
 
 export default function Dashboard() {
   // Mock employee data - replace with actual data from Firebase/API
@@ -85,27 +88,15 @@ export default function Dashboard() {
           <Text style={styles.statLabel}>Yesterday Working Hours</Text>
         </View>
       </View>
-      
-      
 
-      {/* Recent Activities Section
+      <View >
+        <Calendar />
+      </View>
+
       <View style={styles.activitySection}>
-        <Text style={styles.sectionTitle}>Recent Activities</Text>
-        <View style={styles.activityCard}>
-          <View style={styles.activityDot} />
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>Leave Request Approved</Text>
-            <Text style={styles.activityDate}>2 days ago</Text>
-          </View>
-        </View>
-        <View style={styles.activityCard}>
-          <View style={styles.activityDot} />
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>Profile Updated</Text>
-            <Text style={styles.activityDate}>1 week ago</Text>
-          </View>
-        </View>
-      </View> */}
+        <Button label="View Activities" />
+      </View>
+
     </ScrollView>
     </View>
   )
@@ -114,11 +105,11 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F9FEFF',
   },
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F9FEFF',
     paddingTop: 8,
   },
   profileCardWrapper: {
@@ -129,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderColor: 'rgba(203, 213, 225, 0.7)',
     borderWidth: 1,
+    borderRadius: 8,
     padding: 20,
     flexDirection: 'row',
     shadowColor: '#000',
@@ -185,6 +177,7 @@ const styles = StyleSheet.create({
   statCard: {
     width: '48%',
     backgroundColor: '#FFFFFF',
+    borderRadius: 8,
     padding: 16,
     alignItems: 'center',
     shadowColor: '#000',
@@ -313,5 +306,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#94A3B8',
     fontWeight: '400',
+  },
+  calendarContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 24, 
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+      borderWidth: 1,
+    borderColor: 'rgba(203, 213, 225, 0.7)',
   },
 })

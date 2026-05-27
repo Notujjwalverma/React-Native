@@ -135,8 +135,6 @@ export default function SignInScreen() {
           </View>
           {errors.password && <Text style={styles.fieldError}>{errors.password}</Text>}
         </View>
-
-        
       </View>
 
       <Pressable

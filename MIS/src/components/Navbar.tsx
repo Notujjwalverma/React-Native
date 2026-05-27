@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useDrawer } from './DrawerContext'
 
 export default function Navbar({ onMenuPress }: { onMenuPress?: () => void }) {
   const navigation = useNavigation<any>()
+  const drawer = useDrawer()
 
   const handleProfilePress = () => {
     navigation.navigate('Profile')
@@ -11,7 +13,16 @@ export default function Navbar({ onMenuPress }: { onMenuPress?: () => void }) {
   return (
     <View style={styles.navbar}>
       {/* Left: Menu Icon */}
-      <Pressable style={styles.menuButton} onPress={() => onMenuPress && onMenuPress()}>
+      <Pressable
+        style={styles.menuButton}
+        onPress={() => {
+          if (onMenuPress) {
+            onMenuPress()
+          } else {
+            drawer?.openDrawer?.()
+          }
+        }}
+      >
         <View style={styles.menuIcon}>
           <Text style={styles.menuIconText}>☰</Text>
         </View>
