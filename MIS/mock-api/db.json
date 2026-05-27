@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "john@company.com",
+      "password": "password123",
+      "name": "John Doe",
+      "role": "Employee",
+      "department": "Engineering",
+      "avatar": "JD"
+    },
+    {
+      "id": 2,
+      "email": "admin@company.com",
+      "password": "admin123",
+      "name": "Priya Sharma",
+      "role": "Admin",
+      "department": "HR",
+      "avatar": "PS"
+    },
+    {
+      "id": 3,
+      "email": "rahul@company.com",
+      "password": "rahul123",
+      "name": "Rahul Mehta",
+      "role": "Employee",
+      "department": "Design",
+      "avatar": "RM"
+    }
+  ]
+}

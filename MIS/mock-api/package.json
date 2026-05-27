@@ -1,0 +1,16 @@
+{
+  "name": "mis-mock-api",
+  "version": "1.0.0",
+  "description": "Mock API server for MIS Dashboard - Week 1 (Auth only)",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "json-server": "0.17.4"
+  }
+}
