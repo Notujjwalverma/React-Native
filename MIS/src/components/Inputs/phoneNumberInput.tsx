@@ -1,54 +1,35 @@
 import React, { useState } from 'react'
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Platform,
-} from 'react-native'
+import { View, Text, TextInput, StyleSheet, Platform } from 'react-native'
 
-type TextAreaProps = {
+type PhoneNumberInputProps = {
   value?: string
   onChange?: (text: string) => void
   placeholder?: string
-  disabled?: boolean
-  maxLength?: number
-  minRows?: number
-  maxRows?: number
   label?: string
+  disabled?: boolean
   error?: string
-  showCharCount?: boolean
   style?: any
+  maxLength?: number
   editable?: boolean
 }
 
-export default function TextArea({
+export default function PhoneNumberInput({
   value = '',
   onChange,
-  placeholder = 'Enter text here...',
-  disabled = false,
-  maxLength,
-  minRows = 3,
-  maxRows = 6,
+  placeholder = 'Enter phone number',
   label,
+  disabled = false,
   error,
-  showCharCount = false,
   style,
+  maxLength = 15,
   editable = true,
-}: TextAreaProps) {
+}: PhoneNumberInputProps) {
   const [focused, setFocused] = useState(false)
   const [hovered, setHovered] = useState(false)
 
-  const minHeight = Math.max(minRows * 20, 60)
-  const maxHeight = maxRows * 20
-
   return (
     <View style={[styles.container, style]}>
-      {label && (
-        <Text style={[styles.label, error && styles.labelError]}>
-          {label}
-        </Text>
-      )}
+      {label ? <Text style={[styles.label, error && styles.labelError]}>{label}</Text> : null}
 
       <TextInput
         style={[
@@ -57,32 +38,19 @@ export default function TextArea({
           error && styles.inputError,
           disabled && styles.disabled,
           hovered && !disabled && styles.hover,
-          { minHeight, maxHeight },
         ]}
         value={value}
         onChangeText={onChange}
         placeholder={placeholder}
         placeholderTextColor="#94A3B8"
+        keyboardType="phone-pad"
         editable={editable && !disabled}
-        multiline
         maxLength={maxLength}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        textAlignVertical="top"
       />
 
-      <View style={styles.footer}>
-        {error && (
-          <Text style={styles.errorText}>{error}</Text>
-        )}
-        {showCharCount && maxLength && (
-          <Text style={[styles.charCount, value.length === maxLength && styles.charCountFull]}>
-            {value.length} / {maxLength}
-          </Text>
-        )}
-      </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   )
 }
@@ -110,6 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#0F172A',
     fontWeight: '500',
+    height: 48,
     ...Platform.select({
       web: {
         outlineStyle: 'none',
@@ -137,23 +106,10 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: '#DC2626',
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 6,
-  },
   errorText: {
-    fontSize: 12,
+    marginTop: 6,
     color: '#DC2626',
-    fontWeight: '500',
-  },
-  charCount: {
     fontSize: 12,
-    color: '#94A3B8',
     fontWeight: '500',
-  },
-  charCountFull: {
-    color: '#DC2626',
   },
 })

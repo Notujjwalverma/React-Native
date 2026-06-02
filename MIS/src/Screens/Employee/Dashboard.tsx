@@ -5,8 +5,10 @@ import Navbar from '../../components/Navbar'
 import ScrollingMarquee from '../../components/ScrollingMarquee'
 import LeftDrawer from '../../components/LeftDrawer'
 import Calendar from '../../components/Calendar'
-import button from '../../components/Buttons/Button'
 import Button from '../../components/Buttons/Button'
+import Dropdown from '../../components/Inputs/customDropdown'
+import Table from '../../components/Table/Table'
+
 
 export default function Dashboard() {
   // Mock employee data - replace with actual data from Firebase/API
@@ -95,6 +97,26 @@ export default function Dashboard() {
 
       <View style={styles.activitySection}>
         <Button label="View Activities" />
+        <Dropdown
+          options={[
+            { label: 'Today', value: 'today' },
+            { label: 'This Week', value: 'week' },    
+            { label: 'This Month', value: 'month' },
+          ]}
+          placeholder="Filter Activities"
+          onChange={(value) => console.log('Selected filter:', value)}
+        />
+        <Table
+          data={[
+            { id: '1', activity: 'Completed Task A', date: '2024-06-01' },
+            { id: '2', activity: 'Attended Meeting', date: '2024-06-01' },
+            { id: '3', activity: 'Submitted Report', date: '2024-06-02' },
+          ]}
+          columns={[
+            { key: 'activity', title: 'Activity', width: '60%' },
+            { key: 'date', title: 'Date', width: '40%' },
+          ]}
+        />  
       </View>
 
     </ScrollView>
