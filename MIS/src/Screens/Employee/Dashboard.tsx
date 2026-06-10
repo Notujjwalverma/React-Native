@@ -8,6 +8,9 @@ import Calendar from '../../components/Calendar'
 import Button from '../../components/Buttons/Button'
 import Dropdown from '../../components/Inputs/customDropdown'
 import Table from '../../components/Table/Table'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store/store'
+import LeaveRequestStatus from './Leave Management/LeaveRequestStatus'
 
 
 export default function Dashboard() {
@@ -21,9 +24,9 @@ export default function Dashboard() {
     profileImage: 'https://img.freepik.com/premium-photo/indian-bank-employee-smiling-camera-with-welcoming-gesture_1101231-6591.jpg?w=2000',
   })
   const navigation = useNavigation<any>()
-  
-
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const availableLeaves = useSelector((state: RootState) => state.employee.employee.leaveDetails.availableLeaves)
 
   return (
     <View style={styles.screenContainer}>
@@ -45,7 +48,6 @@ export default function Dashboard() {
             />
             <Text style={styles.employeeName}>{employeeData.name}</Text>
           </View>
-
           {/* Employee Info */}
           <View style={styles.infoSection}>
             <View style={styles.detailRow}>
@@ -95,28 +97,12 @@ export default function Dashboard() {
         <Calendar />
       </View>
 
-      <View style={styles.activitySection}>
-        <Button label="View Activities" />
-        <Dropdown
-          options={[
-            { label: 'Today', value: 'today' },
-            { label: 'This Week', value: 'week' },    
-            { label: 'This Month', value: 'month' },
-          ]}
-          placeholder="Filter Activities"
-          onChange={(value) => console.log('Selected filter:', value)}
-        />
-        <Table
-          data={[
-            { id: '1', activity: 'Completed Task A', date: '2024-06-01' },
-            { id: '2', activity: 'Attended Meeting', date: '2024-06-01' },
-            { id: '3', activity: 'Submitted Report', date: '2024-06-02' },
-          ]}
-          columns={[
-            { key: 'activity', title: 'Activity', width: '60%' },
-            { key: 'date', title: 'Date', width: '40%' },
-          ]}
-        />  
+      <View style={styles.leaveSection}>
+         <Text style={styles.leaveTitle}>Remaining Leaves:</Text>
+          <View style={styles.leaveItem}><Text style={styles.leaveType}> PL </Text> <Text style={styles.leaveValue}>{availableLeaves.PL}</Text></View>
+          <View style={styles.leaveItem}><Text style={styles.leaveType}> CL </Text> <Text style={styles.leaveValue}>{availableLeaves.CL}</Text></View>
+          <View style={styles.leaveItem}><Text style={styles.leaveType}> EL </Text> <Text style={styles.leaveValue}>{availableLeaves.EL}</Text></View>
+          <View style={styles.leaveItem}><Text style={styles.leaveType}> SL </Text> <Text style={styles.leaveValue}>{availableLeaves.SL}</Text></View>
       </View>
 
     </ScrollView>
@@ -285,49 +271,38 @@ const styles = StyleSheet.create({
     color: '#0F172A',
     fontWeight: '600',
   },
-  activitySection: {
-    paddingHorizontal: 16,
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: 12,
-  },
-  activityCard: {
-    flexDirection: 'row',
+  leaveSection: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    borderRadius: 8,
+    padding: 20,
+    marginHorizontal: 16,
+
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
-  activityDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#0EA5E9',
-    marginRight: 12,
+  leaveItem : {
+    flexDirection: 'row',
+    justifyContent: 'space-between',  
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
   },
-  activityContent: {
-    flex: 1,
+  leaveTitle: {
+    fontSize: 16,
+    marginBottom: 14,
   },
-  activityTitle: {
-    fontSize: 14,
+  leaveType: {
+    fontSize: 13,
+    color: '#64748B',
     fontWeight: '600',
-    color: '#0F172A',
-    marginBottom: 4,
   },
-  activityDate: {
-    fontSize: 12,
-    color: '#94A3B8',
-    fontWeight: '400',
+  leaveValue: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
   },
   calendarContainer: {
     paddingHorizontal: 16,

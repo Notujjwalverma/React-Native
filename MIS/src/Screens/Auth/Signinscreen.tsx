@@ -14,8 +14,6 @@ const validationSchema = Yup.object({
     .required('Password is required'),
 })
 
-console.log("Signin screen loaded")
-
 export default function SignInScreen() {
   const navigation = useNavigation<any>()
   const [formData, setFormData] = useState({

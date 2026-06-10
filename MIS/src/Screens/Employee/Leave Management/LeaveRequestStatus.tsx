@@ -5,6 +5,8 @@ import Table from '../../../components/Table/Table'
 import Dropdown from '../../../components/Inputs/customDropdown'
 import Message from '../../../components/Popups/Message'
 import LeaveDetails from '../../../components/LeaveDetails'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../redux/store/store'
 
 type RequestType = 'leave' | 'wfh' | 'compoff' | 'halfday'
 
@@ -13,21 +15,14 @@ const options: { id: RequestType | 'all'; label: string }[] = [
   { id: 'leave', label: 'Leave' },
   { id: 'wfh', label: 'WFH' },
   { id: 'compoff', label: 'CompOff' },
-  { id: 'halfday', label: 'Half Day' },
 ]
-
-
 
 export default function LeaveRequestStatus() {
   const [filter, setFilter] = useState<RequestType | 'all'>('all')
   const [message, setMessage] = useState<null | { type: string; title?: string; text: string }>(null)
-
-  const mockRequests = [
-  { id: 1, type: 'leave', startDate: '2026-06-10', endDate: '2026-06-12', status: 'Pending', approver: 'Manager', contact: '9876543210' },
-  { id: 2, type: 'wfh', startDate: '2026-06-05', endDate: '', status: 'Approved', approver: 'Team Lead', contact: '9123456780' },
-  { id: 3, type: 'compoff', startDate: '2026-05-28', endDate: '', status: 'Rejected', approver: 'HR', contact: '9988776655' },
-  { id: 4, type: 'halfday', startDate: '2026-06-01', endDate: '', status: 'Pending', approver: 'Manager', contact: '9012345678' },
-]
+  const employee = useSelector((state: RootState) => state.employee.employee)
+  const mockRequests = employee.leaveDetails.leaveRequests
+  
 
   const data = useMemo(() => {
     return mockRequests

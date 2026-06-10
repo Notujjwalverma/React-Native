@@ -1,43 +1,12 @@
 import { Text, View, StyleSheet, ScrollView, Image } from 'react-native'
 import React from 'react'
 import Navbar from '../../components/Navbar'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store/store'
 
 export default function Profile() {
-  const employeeProfileDetail = {
-    basicDetails: {
-      name: 'Ujjwal Anand',
-      email: 'ujjwal.anand@example.com',
-      designation: 'Software Developer Trainee',
-      employeeId: 'GSI GI 0001',
-      contactNo: '+91 9876543210',
-    },
-    professionalDetails: {
-      dateOfJoining: '2023-01-15',
-      engineeringCouncil: 'Full stack (Angular / Node / React)',
-      primaryDeliveryCouncil: 'ABC-XYZ',
-      secondaryDeliveryCouncil: null,
-      experiencePriorToJoining: '2 years',
-      primaryDCmanager: 'Moirangthem Subhakluxmi',
-      location: 'Gurgaon',
-    },
-    engineeringCouncilDetails: {
-      councilName: 'Full stack (Angular / Node / React)',
-      currentSprint: 'Sprint 12',
-    },
-    deliveryCouncilDetails: {
-      deliveryHead: 'Asha Sharma',
-      deliveryManager: 'Moirangthem Subhakluxmi',
-    },
-    reportees: {
-      directReports: '0',
-      indirectReports: '0',
-    },
-    careerDetail: {
-      lastPromotion: 'N/A',
-      careerAspiration: 'Full stack developer',
-      performanceRating: 'Exceeds Expectations',
-    },
-  }
+  const employee = useSelector((state: RootState) => state.employee.employee)
+  const employeeProfileDetail = employee.profileDetails
 
   const renderSection = (title: string, details: Record<string, string | null>) => {
     const entries = Object.entries(details)
