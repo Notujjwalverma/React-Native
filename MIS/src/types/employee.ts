@@ -1,3 +1,7 @@
+import { mockOrganization } from "../data/mockOrganization"
+import { Organization } from "./organization"
+const optionaOrganizationlHolidays = mockOrganization.Holidays.filter((holiday) => { holiday.type == 'Optional' })
+
 export interface Employee {
   profileDetails: {
     basicDetails: {
@@ -6,8 +10,10 @@ export interface Employee {
       designation: string
       employeeId: string
       contactNo: string
+      officeLocation: string
+      joiningDate: string
     }
-
+    profilePicture: string
     professionalDetails: {
       dateOfJoining: string
       engineeringCouncil: string
@@ -26,6 +32,7 @@ export interface Employee {
     deliveryCouncilDetails: {
       deliveryHead: string
       deliveryManager: string
+      deliveryManagerId: string
     }
 
     reportees: {
@@ -38,6 +45,14 @@ export interface Employee {
       careerAspiration: string
       performanceRating: string
     }
+    skills: {
+      id: string,
+      skillName: string,
+      proficiency: string,
+      experience: string,
+      skillType: 'primary' | 'secondary',
+      updatedOn: string,
+    }[]
   }
 
   leaveDetails: {
@@ -48,12 +63,39 @@ export interface Employee {
       PL: number
     }
 
-    leaveRequests: any[],
-    LWP : {
+    leaveRequests: {
+      requestId: string,
+
+      requestType:
+      | 'Leave'
+      | 'WFH'
+      | 'CompOff'
+      | 'OptionalHoliday',
+
+      holidayDate?: string,
+
+      holidayName?: string,
+
+      status:
+      | 'Pending'
+      | 'Approved'
+      | 'Rejected'
+      | 'Withdrawn',
+
+      appliedOn: string,
+
+      approverId: string,
+    },
+    
+    LWP: {
       count: number,
       dates: string[],
     }
   }
+
+  optionalUserHolidays: {
+    date: string
+  }[]
 
   attendanceDetails: Record<string, any>
 

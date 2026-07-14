@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import { Text, View, StyleSheet, ScrollView, Pressable } from 'react-native'
-import Navbar from '../../../components/Navbar'
-import Table from '../../../components/Table/Table'
-import Dropdown from '../../../components/Inputs/customDropdown'
-import Message from '../../../components/Popups/Message'
-import LeaveDetails from '../../../components/LeaveDetails'
+import Navbar from '../../components/Navbar'
+import Table from '../../components/Table/Table'
+import Dropdown from '../../components/Inputs/customDropdown'
+import Message from '../../components/Popups/Message'
+import LeaveDetails from '../../components/LeaveDetails'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store/store'
+import { RootState } from '../../redux/store/store'
 
 type RequestType = 'leave' | 'wfh' | 'compoff' | 'halfday'
 
@@ -61,7 +61,7 @@ export default function LeaveRequestStatus() {
       <Navbar />
       <Message type={message?.type as any ?? 'info'} title={message?.title} message={message?.text ?? ''} isVisible={!!message} onClose={() => setMessage(null)} />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.heading}>Leave Requests</Text>
         <Text style={styles.subHeading}>View and filter leave requests by type.</Text>
 

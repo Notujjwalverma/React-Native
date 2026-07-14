@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { Text, View, StyleSheet, ScrollView, Pressable } from 'react-native'
-import Navbar from '../../../components/Navbar'
-import Dropdown from '../../../components/Inputs/customDropdown'
-import TextArea from '../../../components/Inputs/TextArea'
-import PhoneNumberInput from '../../../components/Inputs/phoneNumberInput'
-import Button from '../../../components/Buttons/Button'
-import Message from '../../../components/Popups/Message'
+import Navbar from '../../components/Navbar'
+import Dropdown from '../../components/Inputs/customDropdown'
+import TextArea from '../../components/Inputs/TextArea'
+import PhoneNumberInput from '../../components/Inputs/phoneNumberInput'
+import Button from '../../components/Buttons/Button'
+import Message from '../../components/Popups/Message'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store/store'
-import { addLeaveRequest } from '../../../redux/store/slices/employeeSlice'
+import { RootState } from '../../redux/store/store'
+import { addLeaveRequest } from '../../redux/store/slices/employeeSlice'
 import { useDispatch } from 'react-redux'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -138,6 +139,7 @@ export default function ApplyLeave() {
         ? new Date(formData[fieldName])
         : new Date(),
       mode: 'date',
+      minimumDate : new Date(),
       is24Hour: true,
       onChange: (_, selectedDate) => {
         if (!selectedDate) return
@@ -415,7 +417,10 @@ export default function ApplyLeave() {
         onClose={() => setMessage(null)}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.heading}>Apply Leave</Text>
         <Text style={styles.subHeading}>Select the option for which you want to apply:</Text>
 
@@ -455,7 +460,7 @@ export default function ApplyLeave() {
             <Text style={styles.emptyText}>Apply for the selected leave type</Text>
           </View>
         )}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   )
 }
@@ -498,8 +503,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   selectorCardActive: {
-    backgroundColor: '#0EA5E9',
-    borderColor: '#0EA5E9',
+    backgroundColor: '#349fa2',
+    borderColor: '#349fa2',
   },
   selectorCardPressed: {
     opacity: 0.85,
@@ -559,6 +564,8 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 8,
+    shadowOpacity : 0,
+    
   },
   emptyCard: {
     backgroundColor: '#FFFFFF',

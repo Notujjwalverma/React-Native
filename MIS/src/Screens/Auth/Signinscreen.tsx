@@ -1,9 +1,10 @@
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import * as Yup from 'yup'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../firebase/firebaseconfig'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -16,62 +17,26 @@ const validationSchema = Yup.object({
 
 export default function SignInScreen() {
   const navigation = useNavigation<any>()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
-  const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
 
-  const handleSignIn = async () => {
-    setErrors({})
-    
-    try {
-      await validationSchema.validate(formData, { abortEarly: false })
-      
-      setLoading(true)
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      )
-      
-      console.log('User signed in:', userCredential.user.email)
-      setFormData({ email: '', password: '' })
-      navigation.navigate('Dashboard')
-    } catch (error: any) {
-      if (error.inner) {
-        // Yup validation errors
-        const errorMap: { [key: string]: string } = {}
-        error.inner.forEach((err: any) => {
-          errorMap[err.path] = err.message
-        })
-        setErrors(errorMap)
-      } else if (error.code) {
-        let errorMessage = 'An error occurred. Please try again.'
-        if (error.code === 'auth/user-not-found') {
-          errorMessage = 'No account found with this email address'
-        } else if (error.code === 'auth/wrong-password') {
-          errorMessage = 'Incorrect password. Please try again.'
-        } else if (error.code === 'auth/invalid-email') {
-          errorMessage = 'Invalid email address'
-        } else if (error.code === 'auth/user-disabled') {
-          errorMessage = 'This account has been disabled'
-        }
-        setErrors({ form: errorMessage })
-      } else {
-        setErrors({ form: error.message || 'An error occurred' })
-      }
-    } finally {
-      setLoading(false)
-    }
+  const handleSignIn = async () => {  
+    navigation.navigate('Dashboard');
   }
 
-  const isFormValid = formData.email && formData.password && !loading
-
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      extraScrollHeight={30}
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+
+      <Image
+        source={require('../../assets/GeminiLogo-Small-Black.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
       <View style={styles.header}>
         <Text style={styles.title}>MIS</Text>
         <Text style={styles.subtitle}>Sign in to your account</Text>
@@ -83,76 +48,19 @@ export default function SignInScreen() {
         </View>
       )}
 
-      <View style={styles.form}>
-        <View style={styles.field}>
-          <Text style={styles.label}>Organization's Email Address</Text>
-          <TextInput
-            style={[styles.input, errors.email && styles.inputError]}
-            placeholder="you@geminisolutions.com"
-            placeholderTextColor="#B0B9C1"
-            value={formData.email}
-            onChangeText={(text) => {
-              setFormData({ ...formData, email: text })
-              if (errors.email) setErrors({ ...errors, email: '' })
-            }}
-            editable={!loading}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          {errors.email && <Text style={styles.fieldError}>{errors.email}</Text>}
-        </View>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Password</Text>
-          <View style={[styles.passwordContainer, errors.password && styles.inputError]}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="••••••••"
-              placeholderTextColor="#B0B9C1"
-              value={formData.password}
-              onChangeText={(text) => {
-                setFormData({ ...formData, password: text })
-                if (errors.password) setErrors({ ...errors, password: '' })
-              }}
-              editable={!loading}
-              secureTextEntry={!showPassword}
-              autoComplete="off"
-              autoCorrect={false}
-              spellCheck={false}
-              textContentType="password"
-              importantForAutofill="no"
-              underlineColorAndroid="transparent"
-            />
-            <Pressable
-              onPress={() => setShowPassword(!showPassword)}
-              disabled={!formData.password}
-              style={styles.eyeIcon}
-            >
-              <Text style={styles.eyeText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
-            </Pressable>
-          </View>
-          {errors.password && <Text style={styles.fieldError}>{errors.password}</Text>}
-        </View>
-      </View>
 
       <Pressable
-        style={[styles.signInButton, !isFormValid && styles.buttonDisabled]}
+        style={[styles.signInButton]}
         onPress={handleSignIn}
-        disabled={!isFormValid}
       >
-        {loading ? (
-          <ActivityIndicator color="#FFFFFF" size="small" />
-        ) : (
-          <Text style={styles.signInButtonText}>Sign In</Text>
-        )}
+          <Text style={styles.signInButtonText}>Login with SSO</Text>
       </Pressable>
 
-      <View style={styles.footer}>
-        <Pressable onPress={() => navigation.navigate('Dashboard')} disabled={loading}>
-          <Text style={styles.link}>Having trouble signing in?</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
+      <Text style={styles.smallDescription}>
+        This application is to be used only for authorized business purposes by the employees of Gemini Solutions. Unauthorized distribution of any information contained in the website is a violation of Gemini Solutions' internal policies. Use of the website is monitored. If user shares personal data including login credentials with an unauthorized external third party, they may compromise the user's confidential information. Gemini Solutions shall have no liability or responsibility for the integrity, and security of that confidential information.
+      </Text>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -163,69 +71,25 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 30,
     backgroundColor: '#F8FAFC',
+    alignContent: 'center', 
   },
   header: {
-    marginBottom: 32,
+    marginBottom: 70,
+    
   },
   title: {
     fontSize: 40,
-    fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: 8,
+    fontWeight: '800',
+    color: '#205072',
+    textAlign: 'center',
+    marginTop: 18,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#64748B',
     fontWeight: '400',
-  },
-  form: {
-    marginBottom: 24,
-  },
-  field: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#334155',
-    marginBottom: 8,
-  },
-  input: {
-    height: 56,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
-    color: '#0F172A',
-    fontSize: 16,
-  },
-  passwordContainer: {
-    height: 56,
-    display: 'flex',
-    justifyContent: 'space-between',
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  passwordInput: {
-    height: '100%',
-    outlineColor: 'transparent',
-    borderColor: 'transparent',
-    color: '#0F172A',
-    fontSize: 16,
-  },
-  eyeIcon: {
-    padding: 8,
-  },
-  eyeText: {
-    fontSize: 18,
-  },
-  inputError: {
-    borderColor: '#EF4444',
+    textAlign: 'center',
+    fontFamily: 'Roboto',
   },
   fieldError: {
     fontSize: 12,
@@ -244,43 +108,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
   },
-  forgotPassword: {
-    marginBottom: 12,
-  },
   signInButton: {
-    height: 56,
-    backgroundColor: '#0EA5E9',
+    height: 50,
+    backgroundColor: '#349fa2',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-    shadowColor: '#0EA5E9',
+    shadowColor: '#349fa2',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
-  },
-  buttonDisabled: {
-    backgroundColor: '#CBD5E1',
-    shadowColor: 'transparent',
+    
   },
   signInButtonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     color: '#FFFFFF',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 14,
-    color: '#64748B',
+    fontFamily: 'Roboto',
   },
   link: {
     fontSize: 12,
     color: '#0EA5E9',
     fontWeight: '400',
+  },
+  logo: {
+    width: '60%',
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  smallDescription: {
+    fontSize: 9,
+    color: 'rgba(0, 0, 0, 0.5)',
+    fontWeight: '400',
+    marginVertical: 30,
+    borderColor: '#349fa2',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: 'rgba(56,163,165,0.08)',
+    fontFamily: 'Roboto',
   },
 })

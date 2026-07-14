@@ -1,4 +1,5 @@
 import { Employee } from '../types/employee'
+import { mockOrganization } from './mockOrganization'
 
 export const mockEmployee: Employee = {
     profileDetails: {
@@ -8,7 +9,10 @@ export const mockEmployee: Employee = {
             designation: 'Software Developer Trainee',
             employeeId: 'GSI GI 0001',
             contactNo: '+91 9876543210',
+            officeLocation: 'Canaan Tower, Gurgaon',
+            joiningDate: '2023-01-15',
         },
+        profilePicture: 'https://img.freepik.com/premium-photo/indian-bank-employee-smiling-camera-with-welcoming-gesture_1101231-6591.jpg?w=360',
         professionalDetails: {
             dateOfJoining: '2023-01-15',
             engineeringCouncil: 'Full stack (Angular / Node / React)',
@@ -25,6 +29,7 @@ export const mockEmployee: Employee = {
         deliveryCouncilDetails: {
             deliveryHead: 'Asha Sharma',
             deliveryManager: 'Moirangthem Subhakluxmi',
+            deliveryManagerId: 'GSI GI 0002',
         },
         reportees: {
             directReports: '0',
@@ -35,6 +40,40 @@ export const mockEmployee: Employee = {
             careerAspiration: 'Full stack developer',
             performanceRating: 'Exceeds Expectations',
         },
+        skills: [
+            {
+                id: '1',
+                skillName: 'JavaScript',
+                proficiency: 'Advanced',
+                experience: '3 years',
+                skillType: 'primary',
+                updatedOn: '2024-05-01'
+            },
+            {
+                id: '2',
+                skillName: 'React',
+                proficiency: 'Advanced',
+                experience: '2 years',
+                skillType: 'primary',
+                updatedOn: '2024-05-01'
+            },
+            {
+                id: '3',
+                skillName: 'Node.js',
+                proficiency: 'Intermediate',
+                experience: '1 year',
+                skillType: 'secondary',
+                updatedOn: '2024-05-01'
+            },
+            {
+                id: '4',
+                skillName: 'Angular',
+                proficiency: 'Intermediate',
+                experience: '1 year',
+                skillType: 'secondary',
+                updatedOn: '2024-05-01'
+            },
+        ]
     },
 
     leaveDetails: {
@@ -45,9 +84,9 @@ export const mockEmployee: Employee = {
             PL: 5,
         },
         leaveRequests: [
-            
+
         ],
-        LWP : {
+        LWP: {
             count: 0,
             dates: [
                 '10-06-2026',
@@ -56,9 +95,57 @@ export const mockEmployee: Employee = {
         },
     },
 
-    attendanceDetails: {},
+    optionalUserHolidays: [
 
-    assetsDetails: {},
+    ],
 
-    phishingDetails: {},
+    attendanceDetails: {
+        attendanceLogs: [
+            {
+                id: 1,
+                day: 'Monday',
+                date: '2026-06-15',
+                inTime: '09:05 AM',
+                outTime: '06:10 PM',
+                workingHours: '09:05',
+            },
+            {
+                id: 2,
+                day: 'Tuesday',
+                date: '2026-06-16',
+                inTime: '09:00 AM',
+                outTime: '06:00 PM',
+                workingHours: '09:00',
+            },
+            {
+                id: 3,
+                day: 'Wednesday',
+                date: '2026-06-17',
+                inTime: '09:15 AM',
+                outTime: '05:45 PM',
+                workingHours: '08:30',
+            },
+        ],
+    },
+
+    assetsDetails: [
+        {
+            assetName: 'Dell Laptop',
+            assetType: 'Electronics',
+            assignedDate: '2023-01-20',
+            status: 'Assigned',
+
+        },
+        {
+            assetName: 'Office Chair',
+            assetType: 'Furniture',
+            assignedDate: '2023-02-15',
+            status: 'Assigned',
+        }
+    ],
+
+    phishingDetails: {
+
+    },
+
 }

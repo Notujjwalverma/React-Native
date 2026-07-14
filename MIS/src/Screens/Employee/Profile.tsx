@@ -30,7 +30,7 @@ export default function Profile() {
   return (
     <View style={styles.screenContainer}>
       <Navbar />
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <Text style={styles.pageTitle}>Employee Profile</Text>
           <Text style={styles.pageSubtitle}>A complete view of your employee details</Text>
@@ -39,7 +39,7 @@ export default function Profile() {
         <View style={styles.profileCard}>
           <View style={styles.profileHeader}>
             <Image
-              source={{ uri: 'https://img.freepik.com/premium-photo/indian-bank-employee-smiling-camera-with-welcoming-gesture_1101231-6591.jpg?w=360' }}
+              source={{ uri: employeeProfileDetail.profilePicture }}
               style={styles.profileImage}
             />
             <View style={styles.profileMeta}>

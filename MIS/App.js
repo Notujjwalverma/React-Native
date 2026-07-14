@@ -72,8 +72,6 @@ export default function App() {
           backgroundColor="#F8FAFC"
         />
         <Provider store={store}>
-
-
           <NavigationContainer ref={navigationRef}>
             <DrawerProvider navigationRef={navigationRef}>
               <AppNavigator />
@@ -84,6 +82,7 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+
 
 const styles = StyleSheet.create({
   safeArea: {
