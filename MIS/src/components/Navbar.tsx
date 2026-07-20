@@ -34,11 +34,7 @@ export default function Navbar({ onMenuPress }: { onMenuPress?: () => void }) {
       </View>
 
       {/* Right Side - Profile Icon */}
-      <Pressable style={styles.profileButton} onPress={handleProfilePress}>
-        <View style={styles.profileIcon}>
-          <Text style={styles.profileIconText}>👤</Text>
-        </View>
-      </Pressable>
+      
     </View>
   )
 }
@@ -46,18 +42,12 @@ export default function Navbar({ onMenuPress }: { onMenuPress?: () => void }) {
 const styles = StyleSheet.create({
   navbar: {
     height: Platform.OS === 'web' ? 64 : 56,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9FEFF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
     elevation: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
   },
   leftSection: {
     flex: 1,
@@ -65,25 +55,9 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#0EA5E9',
+    fontWeight: '800',
+    color: '#205072',
     letterSpacing: 1,
-  },
-  profileButton: {
-    padding: 8,
-  },
-  profileIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#F1F5F9',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
-  },
-  profileIconText: {
-    fontSize: 20,
   },
   menuButton: {
     marginRight: 12,
@@ -92,11 +66,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#F8FAFC',
+    fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
   menuIconText: {
     fontSize: 20,

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, BackHandler, Platform } from 'react-native'
 import LeftDrawer from './LeftDrawer'
 
 type DrawerContextValue = {
@@ -41,6 +41,27 @@ export function DrawerProvider({ children, navigationRef }: DrawerProviderProps)
       unsubscribe?.()
     }
   }, [navigationRef])
+
+  useEffect(() => {
+    if (Platform.OS !== 'android' || !navigationRef) return
+
+    const onBackPress = () => {
+      if (drawerOpen) {
+        setDrawerOpen(false)
+        return true
+      }
+
+      if (navigationRef.isReady() && navigationRef.canGoBack()) {
+        navigationRef.goBack()
+        return true
+      }
+
+      return false
+    }
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress)
+    return () => subscription.remove()
+  }, [drawerOpen, navigationRef])
 
   return (
     <DrawerContext.Provider value={{ openDrawer, closeDrawer, currentRouteName }}>

@@ -6,9 +6,13 @@ import {
   Dimensions,
   Pressable,
   Text,
+  Image
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDrawer } from './DrawerContext'
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux/store/store'
+import fallbackAvatar from '../assets/icon.png'
 
 export default function LeftDrawer({
   open,
@@ -23,6 +27,12 @@ export default function LeftDrawer({
   const screenWidth = Dimensions.get('window').width
   const drawerWidth = Math.min(320, Math.round(screenWidth * 0.78))
   const anim = useRef(new Animated.Value(open ? 1 : 0)).current
+  const employee = useSelector((state: RootState) => state.employee.employee)
+
+  const designation = employee.profileDetails.basicDetails.designation
+  const profileImageSource = employee?.profileDetails?.profilePicture
+    ? { uri: employee.profileDetails.profilePicture }
+    : fallbackAvatar
 
   useEffect(() => {
     Animated.timing(anim, {
@@ -37,6 +47,7 @@ export default function LeftDrawer({
 
   // local dropdown states
   const [leaveOpen, setLeaveOpen] = useState(false)
+  const [appraisalOpen, setAppraisalOpen] = useState(false)
   const [otherOpen, setOtherOpen] = useState(false)
 
   const navigate = (route: string, params?: any) => {
@@ -59,9 +70,14 @@ export default function LeftDrawer({
       </Animated.View>
 
       <Animated.View style={[styles.drawer, { width: drawerWidth, transform: [{ translateX }] }]}>
+
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>MIS</Text>
+          <View style={styles.bottomSection}>
+          <Image style={styles.bottomImage} source={require('../assets/GeminiLogo-Small-Black.png')} resizeMode="contain" />
         </View>
+        </View>
+
+        
 
         <View style={styles.content}>
           <Pressable
@@ -93,6 +109,35 @@ export default function LeftDrawer({
               <Pressable style={styles.subItem} onPress={() => navigate('LeaveRequestStatus')}>
                 <Text style={styles.subItemText}>View Request Status</Text>
               </Pressable>
+              {designation === 'Manager' && (
+                <Pressable style={styles.subItem} onPress={() => navigate('LeaveApproval')}>
+                  <Text style={styles.subItemText}>Approve Leaves</Text>
+                </Pressable>
+              )}
+              {designation === 'Manager' && (
+                <Pressable style={styles.subItem} onPress={() => navigate('TeamLeaveStatus')}>
+                  <Text style={styles.subItemText}>Team Leave Status</Text>
+                </Pressable>
+              )}
+
+            </View>
+          )}
+
+          <Pressable
+            style={[styles.item, isActiveRoute(['AddGoals', 'MyAchievements']) && styles.activeItem]}
+            onPress={() => setAppraisalOpen((v) => !v)}
+          >
+            <Text style={[styles.itemText, isActiveRoute(['AddGoals', 'MyAchievements']) && styles.activeItemText]}>Appraisal Management</Text>
+            <Text style={styles.chev}>{appraisalOpen ? '▾' : '▸'}</Text>
+          </Pressable>
+          {appraisalOpen && (
+            <View style={styles.subList}>
+              <Pressable style={styles.subItem} onPress={() => navigate('Appraisal_addGoals')}>
+                <Text style={styles.subItemText}>Add Goals</Text>
+              </Pressable>
+              <Pressable style={styles.subItem} onPress={() => navigate('Appraisal_myAchievements')}>
+                <Text style={styles.subItemText}>My Achievements</Text>
+              </Pressable>
             </View>
           )}
 
@@ -118,6 +163,19 @@ export default function LeftDrawer({
           )}
 
         </View>
+
+        <View style={styles.profileSection} >
+          <Image
+            source={profileImageSource}
+            style={styles.profileImage}
+          />
+          <View>
+            <Text style={styles.profileName}>{employee.profileDetails.basicDetails.name}</Text>
+            <Text style={styles.profileDesignation}>{employee.profileDetails.basicDetails.designation}</Text>
+          </View>
+        </View>
+
+        
       </Animated.View>
     </>
   )
@@ -147,6 +205,8 @@ const styles = StyleSheet.create({
     elevation: 8,
     zIndex: 101,
     paddingTop: 48,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   header: {
     paddingHorizontal: 16,
@@ -155,11 +215,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F1F5F9',
   },
   headerTitle: {
-    fontSize: 22,
+    fontSize: 36,
     fontWeight: '700',
-    color: '#0EA5E9',
+    color: '#349fa2',
   },
   content: {
+    flex: 1,
     paddingHorizontal: 8,
     paddingTop: 8,
   },
@@ -207,4 +268,33 @@ const styles = StyleSheet.create({
   backdropPressable: {
     ...StyleSheet.absoluteFill,
   },
+
+  profileSection: {
+    marginVertical: 16,
+    marginHorizontal: 8,
+    padding: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 54,
+    height: 54,
+    borderRadius: 32,
+    marginRight: 12,
+  },
+  profileName: {
+    fontSize: 18,
+    color: '#0F172A',
+  },
+  bottomImage: {
+    width: 188,
+    height: 48,
+    borderRadius: 24,
+  },
+
+  profileDesignation: {
+    fontSize: 14,
+    color: '#64748B',
+  },
+
 })
